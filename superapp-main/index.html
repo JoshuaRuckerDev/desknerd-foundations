@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yeauxx Super App - Main Portal</title>
+
+    <!-- Reset + Main Styles -->
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <!-- Top bar / logo -->
+      <header class="top-bar">
+        <div class="logo">YeauxxBR</div>
+        <div class="top-bar-right">
+          <span class="tagline">Choose Your World</span>
+        </div>
+      </header>
+
+      <!-- World Selector -->
+      <main class="worlds-wrapper">
+        <!-- Y World -->
+        <section class="world-panel world-y" data-index="0">
+          <div class="world-content">
+            <!-- Y World Window  (animated preview)-->
+            <div class="world-window world-window-y"></div>
+
+            <h1 class="world-title">Y World</h1>
+            <p class="world-subtitle">Adventure IP Theme Park Universe</p>
+            <a href="worlds/ygate.html" class="world-button">Enter Y Adventure</a>
+          </div>
+        </section>
+
+        <!-- B World -->
+        <section class="world-panel world-b" data-index="1">
+          <div class="world-content">
+            <div class="world-window world-window-b"></div>
+
+            <h1 class="world-title">B World</h1>
+            <p class="world-subtitle">Business Vaults Finance Layer</p>
+            <a href="worlds/b.html" class="world-button">Enter B Layer</a>
+          </div>
+        </section>
+
+        <!-- R1 World-->
+        <section class="world-panel world-r1" data-index="2">
+          <div class="world-content">
+            <div class="world-window world-window-r1"></div>
+            <h1 class="world-title">R1 World</h1>
+            <p class="world-subtitle">Resources Infra Productivity Zone</p>
+            <a href="worlds/r1.html" class="world-button">Enter R1 World</a>
+          </div>
+        </section>
+
+        <!-- R2 World -->
+        <section class="world-panel world-r2" data-index="3">
+          <div class="world-content">
+            <div class="world-window world-window-r2"></div>
+            <h1 class="world-title">Yeaux Event</h1>
+            <p class="world-subtitle">Events Game Show Fun Land</p>
+            <a href="worlds/r2.html" class="world-button">Enter Yeaux Event</a>
+          </div>
+        </section>
+      </main>
+
+      <!-- Arrows for desktop / easy navigation -->
+      <button class="nav-arrow nav-arrow-left" id="arrowLeft">&#10094;</button>
+      <button class="nav-arrow nav-arrow-right" id="arrowRight">
+        &#10095;
+      </button>
+
+      <!-- Dot indicators -->
+      <div class="dot-indicator">
+        <span class="dot active" data-target="0"></span>
+        <span class="dot" data-target="1"></span>
+        <span class="dot" data-target="2"></span>
+        <span class="dot" data-target="3"></span>
+      </div>
+    </div>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

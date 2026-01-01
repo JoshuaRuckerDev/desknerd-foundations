@@ -1,0 +1,277 @@
+/* =========================================================
+   RESET GLOBAL LOOK
+   ========================================================= */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #050816;
+  color: #ffffff;
+  overflow: hidden; /* Prevent vertical scroll */
+}
+
+.app-shell {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+.top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+}
+
+.logo {
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.tagline {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* =========================================================
+   WORLD PANEL LAYOUT (Side-scrolling worlds)
+   ========================================================= */
+.worlds-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;     /* Horizontal scroll */
+  overflow-y: hidden;   /* Disable vertical scroll */
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+
+.world-panel {
+  position: relative;
+  min-width: 100vw;
+  height: 100vh;
+  scroll-snap-align: start;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 16px 32px;
+  text-align: center;
+}
+
+.world-content {
+  max-width: 340px;
+}
+
+/* =========================================================
+   WORLD TITLES / BUTTONS
+   ========================================================= */
+.world-title {
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.world-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+
+.world-button {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+
+  transition: background 0.3s ease;
+}
+
+.world-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* =========================================================
+   WORLD BACKGROUNDS
+   ========================================================= */
+.world-y {
+  background: radial-gradient(circle at top, #28e0ff 0, #050816 55%, #020308 100%);
+}
+
+.world-b {
+  background: radial-gradient(circle at top, #1e3a8a 0, #020617 55%, #000000 100%);
+}
+
+.world-r1 {
+  background: radial-gradient(circle at top, #16a34a 0, #052e16 50%, #020617 100%);
+}
+
+.world-r2 {
+  background: radial-gradient(circle at top, #f97316 0, #7e22ce 40%, #020617 100%);
+}
+
+/* =========================================================
+   WORLD WINDOWS (animated previews)
+   ========================================================= */
+.world-window {
+  width: 100%;
+  height: 160px;
+  border-radius: 18px;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: radial-gradient(circle at top, #1f2937 0, #020617 60%, #000 100%);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.7);
+
+  transform: translateY(4px) scale(0.98);
+  transition: transform 0.4s ease, box-shadow 0.4s ease,
+    border-color 0.4s ease;
+}
+
+/* Lift up on hover */
+.world-panel:hover .world-window {
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.9);
+}
+
+/* Glow layer */
+.world-window::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 180deg,
+    rgba(56, 189, 248, 0),
+    rgba(56, 189, 248, 0.3),
+    rgba(244, 114, 182, 0.25),
+    rgba(56, 189, 248, 0)
+  );
+  mix-blend-mode: screen;
+  opacity: 0.45;
+  transform: translateX(-30%);
+  animation: window-glow 12s linear infinite;
+  pointer-events: none;
+}
+
+/* Glow fades slightly when not hovered */
+.world-panel:not(:hover) .world-window::before {
+  opacity: 0.25;
+}
+
+@keyframes window-glow {
+  0% { transform: translateX(-40%); }
+  100% { transform: translateX(40%); }
+}
+
+/* =========================================================
+   Y WORLD WINDOW – theme park motion (placeholder)
+   ========================================================= */
+.world-window-y {
+  background-image:
+    radial-gradient(circle at 20% 15%, rgba(251, 191, 36, 0.55), transparent 55%),
+    radial-gradient(circle at 80% 25%, rgba(56, 189, 248, 0.55), transparent 55%),
+    radial-gradient(circle at 10% 80%, rgba(187, 247, 208, 0.35), transparent 55%),
+    linear-gradient(to bottom, #020617, #020617 40%, #000 100%);
+
+  background-size: 140% 140%;
+  background-position: 0% 50%;
+
+  animation: y-window-pan 18s linear infinite;
+}
+
+/* Slow panning camera effect */
+@keyframes y-window-pan {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* =========================================================
+   ARROWS
+   ========================================================= */
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 1.4rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+
+  transition: background 0.3s ease;
+}
+
+.nav-arrow:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-arrow-left { left: 10px; }
+.nav-arrow-right { right: 10px; }
+
+/* =========================================================
+   DOT INDICATORS
+   ========================================================= */
+.dot-indicator {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  gap: 12px;
+  z-index: 20;
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  background: rgba(255, 255, 255, 0.2);
+
+  transition: background 0.3s ease;
+}
+
+.dot.active {
+  background: #ffffff;
+}

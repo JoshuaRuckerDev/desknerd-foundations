@@ -1,0 +1,430 @@
+<div
+  class="world-window"
+  id="worldWindow"
+  tabindex="0"
+  role="button"
+  aria-label="Enter the theme park world"
+>
+  <div class="ww-sky"></div>
+
+  <div class="ww-clouds">
+    <span class="cloud c1"></span>
+    <span class="cloud c2"></span>
+    <span class="cloud c3"></span>
+  </div>
+
+  <div class="ww-skyline"></div>
+
+  <div class="ww-coaster">
+    <svg viewBox="0 0 1000 240" preserveAspectRatio="none" aria-hidden="true">
+      <path
+        class="track"
+        d="M10,180 C180,40 320,220 470,130 C610,45 720,180 850,120 C920,88 960,120 990,150"
+      />
+      <path
+        class="trackGlow"
+        d="M10,180 C180,40 320,220 470,130 C610,45 720,180 850,120 C920,88 960,120 990,150"
+      />
+    </svg>
+    <div class="train"></div>
+  </div>
+
+  <div class="ww-foreground"></div>
+
+  <div class="ww-particles" aria-hidden="true"></div>
+
+  <div class="ww-ui">
+    <div class="ww-title">Y-Layer Theme Park</div>
+    <div class="ww-sub">Hover to dive in • Click to enter</div>
+  </div>
+</div>
+
+<style>
+  /* ===== Window Shell ===== */
+  .world-window {
+    width: min(720px, 92vw);
+    height: min(380px, 46vw);
+    max-height: 420px;
+    border-radius: 26px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+
+    /* Glass + frame */
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 220, 120, 0.22);
+    box-shadow: 0 26px 60px rgba(0, 0, 0, 0.55),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+
+    transform-style: preserve-3d;
+    transition: transform 420ms ease, box-shadow 420ms ease, filter 420ms ease;
+    outline: none;
+  }
+
+  /* “Dive-in” feel on hover */
+  .world-window:hover,
+  .world-window:focus-visible {
+    transform: perspective(900px) rotateX(6deg) rotateY(-8deg) scale(1.02);
+    box-shadow: 0 34px 80px rgba(0, 0, 0, 0.6),
+      0 0 40px rgba(255, 220, 120, 0.18),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    filter: saturate(1.05);
+  }
+
+  /* When clicked (optional “warp” pulse) */
+  .world-window.entering {
+    transform: perspective(900px) rotateX(2deg) rotateY(-3deg) scale(1.06);
+  }
+
+  /* ===== Layers ===== */
+  .ww-sky {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at 75% 25%,
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(255, 255, 255, 0.28) 18%,
+        rgba(255, 255, 255, 0) 46%
+      ),
+      linear-gradient(
+        180deg,
+        #66b9ff 0%,
+        #a6dbff 40%,
+        #e9fbff 78%,
+        #e8f6ff 100%
+      );
+    transform: translateZ(-40px);
+  }
+
+  /* Clouds */
+  .ww-clouds {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.95;
+  }
+  .cloud {
+    position: absolute;
+    width: 280px;
+    height: 100px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 18px 40px rgba(255, 255, 255, 0.22),
+      inset 0 -10px 20px rgba(180, 225, 255, 0.35);
+    filter: blur(0.2px);
+    transform: translateX(-40%);
+    animation: cloudDrift linear infinite;
+  }
+  .cloud::before,
+  .cloud::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.95);
+  }
+  .cloud::before {
+    width: 120px;
+    height: 80px;
+    left: 40px;
+    top: -30px;
+  }
+  .cloud::after {
+    width: 150px;
+    height: 98px;
+    left: 120px;
+    top: -44px;
+  }
+
+  @keyframes cloudDrift {
+    from {
+      transform: translateX(-50vw);
+    }
+    to {
+      transform: translateX(140vw);
+    }
+  }
+  .c1 {
+    top: 10%;
+    left: -10%;
+    animation-duration: 34s;
+    opacity: 0.92;
+  }
+  .c2 {
+    top: 22%;
+    left: -30%;
+    animation-duration: 44s;
+    opacity: 0.8;
+    transform: scale(0.9);
+  }
+  .c3 {
+    top: 35%;
+    left: -20%;
+    animation-duration: 38s;
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+
+  /* Skyline (slow parallax) */
+  .ww-skyline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 32%;
+    height: 26%;
+    opacity: 0.75;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1)),
+      repeating-linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.18) 0 18px,
+        rgba(0, 0, 0, 0.1) 18px 32px,
+        rgba(0, 0, 0, 0.18) 32px 48px
+      );
+    clip-path: polygon(
+      0% 100%,
+      0% 70%,
+      6% 70%,
+      6% 52%,
+      12% 52%,
+      12% 64%,
+      18% 64%,
+      18% 42%,
+      24% 42%,
+      24% 66%,
+      32% 66%,
+      32% 36%,
+      38% 36%,
+      38% 62%,
+      46% 62%,
+      46% 48%,
+      52% 48%,
+      52% 60%,
+      60% 60%,
+      60% 40%,
+      66% 40%,
+      66% 66%,
+      74% 66%,
+      74% 52%,
+      80% 52%,
+      80% 64%,
+      88% 64%,
+      88% 44%,
+      94% 44%,
+      94% 70%,
+      100% 70%,
+      100% 100%
+    );
+    animation: skylineDrift 18s linear infinite;
+  }
+  @keyframes skylineDrift {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 520px 0;
+    }
+  }
+
+  /* Coaster + train */
+  .ww-coaster {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: 30%;
+    height: 22%;
+    filter: drop-shadow(0 18px 25px rgba(0, 0, 0, 0.2));
+    opacity: 0.95;
+  }
+  .track {
+    fill: none;
+    stroke: rgba(20, 20, 30, 0.35);
+    stroke-width: 12;
+    stroke-linecap: round;
+  }
+  .trackGlow {
+    fill: none;
+    stroke: rgba(255, 220, 120, 0.6);
+    stroke-width: 4;
+    stroke-linecap: round;
+  }
+
+  .train {
+    position: absolute;
+    width: 46px;
+    height: 18px;
+    border-radius: 10px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.92),
+      rgba(230, 245, 255, 0.76)
+    );
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.15);
+    left: -10%;
+    top: 58%;
+    animation: trainRide 6.2s linear infinite;
+  }
+  .train::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 5px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 220, 120, 0.95);
+    box-shadow: 0 0 12px rgba(255, 220, 120, 0.7);
+  }
+  @keyframes trainRide {
+    0% {
+      transform: translateX(0) translateY(0) rotate(6deg);
+      opacity: 0;
+    }
+    8% {
+      opacity: 1;
+    }
+    35% {
+      transform: translateX(38vw) translateY(-26px) rotate(-6deg);
+    }
+    65% {
+      transform: translateX(68vw) translateY(10px) rotate(4deg);
+    }
+    92% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(95vw) translateY(0) rotate(2deg);
+      opacity: 0;
+    }
+  }
+
+  /* Foreground “walkway” shimmer */
+  .ww-foreground {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6%;
+    height: 40%;
+    background: radial-gradient(
+        circle at 50% 20%,
+        rgba(255, 220, 120, 0.18),
+        transparent 60%
+      ),
+      linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.55));
+  }
+  .ww-foreground::after {
+    content: "";
+    position: absolute;
+    inset: 25% -10% -10% -10%;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.12) 0 2px,
+        transparent 2px 40px
+      ),
+      linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.08) 0 2px,
+        transparent 2px 40px
+      );
+    opacity: 0.38;
+    transform: perspective(900px) rotateX(62deg);
+    transform-origin: bottom;
+    animation: gridShimmer 2.6s ease-in-out infinite;
+  }
+  @keyframes gridShimmer {
+    0%,
+    100% {
+      opacity: 0.24;
+    }
+    50% {
+      opacity: 0.46;
+    }
+  }
+
+  /* Particles */
+  .ww-particles {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at 10% 80%,
+        rgba(255, 255, 255, 0.22) 0 1px,
+        transparent 2px
+      ),
+      radial-gradient(
+        circle at 30% 60%,
+        rgba(255, 255, 255, 0.18) 0 1px,
+        transparent 2px
+      ),
+      radial-gradient(
+        circle at 55% 72%,
+        rgba(255, 255, 255, 0.16) 0 1px,
+        transparent 2px
+      ),
+      radial-gradient(
+        circle at 75% 52%,
+        rgba(255, 255, 255, 0.12) 0 1px,
+        transparent 2px
+      ),
+      radial-gradient(
+        circle at 88% 70%,
+        rgba(255, 255, 255, 0.14) 0 1px,
+        transparent 2px
+      );
+    opacity: 0.55;
+    animation: particleFloat 4.6s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes particleFloat {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* UI overlay */
+  .ww-ui {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: rgba(0, 0, 0, 0.82);
+    text-shadow: 0 10px 30px rgba(255, 255, 255, 0.55);
+  }
+  .ww-title {
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 14px;
+  }
+  .ww-sub {
+    font-weight: 700;
+    opacity: 0.82;
+    font-size: 13px;
+  }
+</style>
+
+<script>
+  const ww = document.getElementById("worldWindow");
+
+  // Optional: a tiny “warp” bump on click so it feels interactive
+  ww.addEventListener("click", () => {
+    ww.classList.add("entering");
+    setTimeout(() => ww.classList.remove("entering"), 260);
+
+    // Later you can route:
+    // window.location.href = "y-layer.html";
+  });
+
+  // Keyboard accessibility
+  ww.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      ww.click();
+    }
+  });
+</script>
